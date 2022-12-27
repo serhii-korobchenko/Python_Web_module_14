@@ -1,0 +1,10 @@
+scrapy shell
+url = 'https://quotes.toscrape.com/'
+fetch(url)
+view(response)
+print(response.text)
+response.xpath("/html//small").extract()
+response.xpath("/html//small[@class='author']/text()").extract()
+scrapy startproject test_spyder
+scrapy genspider authors quotes.toscrape.com
+scrapy crawl authors
