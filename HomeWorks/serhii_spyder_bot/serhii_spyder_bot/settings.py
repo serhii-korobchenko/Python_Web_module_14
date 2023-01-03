@@ -44,15 +44,15 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'serhii_spyder_bot.middlewares.SerhiiSpyderBotSpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+   'serhii_spyder_bot.middlewares.SerhiiSpyderBotSpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
+# DOWNLOADER_MIDDLEWARES = {
 #    'serhii_spyder_bot.middlewares.SerhiiSpyderBotDownloaderMiddleware': 543,
-#}
+# }
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -62,9 +62,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'serhii_spyder_bot.pipelines.SerhiiSpyderBotPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'serhii_spyder_bot.pipelines.SerhiiSpyderBotPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -92,5 +92,12 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
 TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
 
 
-FEED_FORMAT="csv"
-FEED_URI="results.csv"
+FEEDS = {
+    'results.json': {
+        'format': 'jsonlines',
+        'encoding': 'utf8',
+        'overwrite': True,
+
+    },
+}
+

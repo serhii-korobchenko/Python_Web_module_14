@@ -2,6 +2,7 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from pydoc import html
 
 from scrapy import signals
 
@@ -33,8 +34,16 @@ class SerhiiSpyderBotSpiderMiddleware:
         # it has processed the response.
 
         # Must return an iterable of Request, or item objects.
+
         for i in result:
             yield i
+            print(f'-----------------DICT______{i}')
+            for value in i.values():
+                print(f'-----------------LIST______{value}')
+                for item in value:
+                    big = item.upper()
+                    print(f'-----------------ITEM______{big}')
+
 
     def process_spider_exception(self, response, exception, spider):
         # Called when a spider or process_spider_input() method
@@ -87,6 +96,11 @@ class SerhiiSpyderBotDownloaderMiddleware:
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+
+
+
+        # new_response = response.replace(body=unescaped_body)
+        # return new_response
         return response
 
     def process_exception(self, request, exception, spider):
