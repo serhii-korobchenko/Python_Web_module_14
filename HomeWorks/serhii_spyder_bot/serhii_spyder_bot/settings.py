@@ -101,3 +101,4 @@ FEEDS = {
     },
 }
 
+CONNECTION_STRING = "sqlite:///scrapy_quotes.db"

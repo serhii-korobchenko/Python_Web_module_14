@@ -2,9 +2,10 @@
 #
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-from pydoc import html
+
 
 from scrapy import signals
+from scrapy.http import Response
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -32,17 +33,38 @@ class SerhiiSpyderBotSpiderMiddleware:
     def process_spider_output(self, response, result, spider):
         # Called with the results returned from the Spider, after
         # it has processed the response.
-
         # Must return an iterable of Request, or item objects.
 
-        for i in result:
-            yield i
-            print(f'-----------------DICT______{i}')
-            for value in i.values():
-                print(f'-----------------LIST______{value}')
-                for item in value:
-                    big = item.upper()
-                    print(f'-----------------ITEM______{big}')
+        #Response
+        # for i in result:
+        #     print(f'-----Result: {i}, Type: {type(i)}')
+        #     yield i
+        # print(f'-----Response: {response.text}, Type: {type(response.text)}')
+        # print(f'-----Spider: {spider}, Type: {type(spider)}')
+        try:
+            for i in result:
+
+                print(f'-----------------TYPE______{type(i)}')
+
+                if type(i) is dict:
+                    for key, value in i.items():
+                        #print(f'-----------------LIST______{value}')
+
+                        for item in value:
+
+                            # normalization
+                            strip_item = item.strip()
+                            first_replace_item = strip_item.replace('”', '')
+                            second_replace_item = first_replace_item.replace('“', '')
+
+                            value.insert(0, second_replace_item)
+                            value.remove(item)
+
+                            #print(f'-----------------ITEM______{item}')
+
+                yield i
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
 
 
     def process_spider_exception(self, response, exception, spider):
