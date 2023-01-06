@@ -44,7 +44,7 @@ class SerhiiSpyderBotPipeline:
 
                 session.add(author)
 
-            print(f"--------->  {session.query(Author).filter_by(name=author.name).first().id}")
+            #print(f"--------->  {session.query(Author).filter_by(name=author.name).first().id}")
             quote.author_id = session.query(Author).filter_by(name=author.name).first().id
             session.add(quote)
             session.commit()
@@ -69,49 +69,51 @@ class SerhiiSpyderBotPipeline:
 
         return item
 
-###########################################################################
-    # def process_item(self, item, spider):
-    #     """Save quotes in the database
-    #     This method is called for every item pipeline component
-    #     """
-    #     session = self.Session()
-    #     quote = Quote()
-    #     author = Author()
-    #     tag = Tag()
-    #     author.name = item["author"]
-    #     author.birthday = item["author_birthday"]
-    #     author.bornlocation = item["author_bornlocation"]
-    #     author.bio = item["author_bio"]
-    #     quote.quote_content = item["quote"]
-    #
-    #     # check whether the author exists
-    #     exist_author = session.query(Author).filter_by(name = author.name).first()
-    #     if exist_author is not None:  # the current author exists
-    #         quote.author = exist_author
-    #     else:
-    #         quote.author = author
-    #
-    #     # check whether the current quote has tags or not
-    #     if "keywords" in item:
-    #         for tag_name in item["keywords"]:
-    #             tag = Tag(name=tag_name)
-    #             # check whether the current tag already exists in the database
-    #             exist_tag = session.query(Tag).filter_by(name = tag.name).first()
-    #             if exist_tag is not None:  # the current tag exists
-    #                 tag = exist_tag
-    #             quote.tags.append(tag)
-    #
-    #     try:
-    #
-    #         session.add(quote)
-    #         session.commit()
-    #
-    #     except:
-    #         session.rollback()
-    #         raise
-    #
-    #     finally:
-    #         session.close()
-    #
-    #     return item
+class SerhiiSpyderBotPipelineDetail:
 
+
+    def __init__(self):
+        """
+        Initializes database connection and sessionmaker
+        Creates tables
+        """
+        engine = db_connect()
+        self.Session = sessionmaker(bind=engine)
+
+    def process_item(self, item, spider):
+        """Save quotes in the database
+        This method is called for every item pipeline component
+        """
+        session = self.Session()
+
+        new_author = Author()
+        new_author.name = item["author"][0]
+        new_author.id = session.query(Author).filter_by(name=new_author.name).first().id
+        new_author.ref = session.query(Author).filter_by(name=new_author.name).first().ref
+        new_author.birthday = item["birthday"][0]
+        new_author.bornlocation = item["bornlocation"][0]
+
+        # check whether the author exists
+        exist_author = session.query(Author).filter_by(name=new_author.name).first()
+        try:
+            if exist_author is not None:  # the current author exists
+
+                session.delete(exist_author)
+                session.commit()
+                session.add(new_author)
+                session.commit()
+
+
+            #print(f"--------->  {session.query(Author).filter_by(name=author.name).first().id}")
+
+            #session.commit()
+
+
+        except:
+            session.rollback()
+            raise
+
+        finally:
+            session.close()
+
+        return item

@@ -3,6 +3,27 @@ import scrapy
 
 class AuthorsSpider(scrapy.Spider):
     name = 'authors_hw'
+    # start custom settings
+    custom_settings = {'ITEM_PIPELINES' : {
+        'serhii_spyder_bot.pipelines.SerhiiSpyderBotPipeline': 300
+                                          },
+
+    "FEEDS" : {
+        'main_info.json': {
+            'format': 'jsonlines',
+            'encoding': 'utf8',
+            'overwrite': True,
+
+                        },
+              },
+
+        "SPIDER_MIDDLEWARES" : {
+        'serhii_spyder_bot.middlewares.SerhiiSpyderBotSpiderMiddleware': 543,
+    }
+ }
+    # stop custom settings
+
+
     allowed_domains = ['quotes.toscrape.com']
     start_urls = ['http://quotes.toscrape.com']
 

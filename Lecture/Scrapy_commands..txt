@@ -12,3 +12,4 @@ scrapy genspider authors quotes.toscrape.com
 scrapy crawl authors_hw
 scrapy  crawl  quotes  -O  quotes.json
 scrapy  crawl  quotes  -o  quotes.jsonl
+scrapy crawl authors_detail
